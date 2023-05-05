@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-   <title>Pacman Demo</title>
-   <style type="text/css">
-    body{
+  <head>
+    <title>Pacman Demo</title>
+    <style type="text/css">
+      body {
         background-color: black;
         margin: 0px;
-    }
-    div.row div{
+      }
+      div.row div {
         width: 20px;
         height: 20px;
         display: inline-block;
-    }
-    div.brick{
+      }
+      div.brick {
         background-color: blue;
-
-    }
-    div.coin{
+      }
+      div.coin {
         background: url(assets/coin.gif);
         background-repeat: no-repeat;
         background-position: center;
-        
-    }
-    div.cherry{
+      }
+      div.cherry {
         background: url(assets/cherry.png);
         background-repeat: no-repeat;
         background-size: cover;
-    }
-    div.empty{
-
-    }
-    div#pacman{
+      }
+      div.empty {
+      }
+      div#pacman {
         background: url(assets/pacman.gif);
         background-repeat: no-repeat;
         background-position: center;
@@ -38,60 +35,60 @@
         width: 20px;
         height: 20px;
         position: absolute;
-    }
-    div.scoreText{
+      }
+      div.scoreText {
         color: goldenrod;
         padding: 5px;
         position: absolute;
-		top:10px;
-		left:429px;
+        top: 10px;
+        left: 429px;
         font-family: cursive;
         font-size: larger;
-    }
-    div.points{
+      }
+      div.points {
         color: goldenrod;
         padding: 5px;
         position: absolute;
-		top:100px;
-		left:425px;
+        top: 100px;
+        left: 425px;
         font-family: cursive;
-    }
-    div.cherryImg{
+      }
+      div.cherryImg {
         background-image: url(assets/cherry.png);
         background-repeat: no-repeat;
         background-size: cover;
         position: absolute;
-		top:130px;
-		left:425px;
+        top: 130px;
+        left: 425px;
         padding: 10px;
-    }
-    div.cherryPoints{
+      }
+      div.cherryPoints {
         position: absolute;
-		top:125px;
-		left:435px;
+        top: 125px;
+        left: 435px;
         padding: 10px;
         color: goldenrod;
         font-size: smaller;
-    }
-    div.coinImg{
+      }
+      div.coinImg {
         background-image: url(assets/coin.gif);
         background-repeat: no-repeat;
         background-position: center;
         position: absolute;
-		top:160px;
-		left:425px;
+        top: 160px;
+        left: 425px;
         width: 20px;
         height: 20px;
-    }
-    div.coinPoints{
+      }
+      div.coinPoints {
         position: absolute;
-		top:152px;
-		left:435px;
+        top: 152px;
+        left: 435px;
         padding: 10px;
         color: goldenrod;
         font-size: smaller;
-    }
-    div#score{
+      }
+      div#score {
         border: 5px dotted violet;
         width: 40px;
         height: 20px;
@@ -99,112 +96,124 @@
         padding: 5px;
         text-align: center;
         position: absolute;
-		top:50px;
-		left:430px;
-    }
-
-   </style>
-</head>
-<body>
+        top: 50px;
+        left: 430px;
+      }
+    </style>
+  </head>
+  <body>
     <div class="container">
-        <div id="world"></div>
-        <div id="pacman"></div>
-        <div class="scoreText">
-            score
-        </div>
-        <div>
-            <div class="points">Items:</div>
-            <div class="cherryImg"></div>
-            <div class="cherryPoints">: 50 pts</div>
-            <div class="coinImg"></div>
-            <div class="coinPoints">: 10 pts</div>
-        </div>
-        <div id="score">0</div>
+      <div id="world"></div>
+      <div id="pacman"></div>
+      <div class="scoreText">score</div>
+      <div>
+        <div class="points">Items:</div>
+        <div class="cherryImg"></div>
+        <div class="cherryPoints">: 50 pts</div>
+        <div class="coinImg"></div>
+        <div class="coinPoints">: 10 pts</div>
+      </div>
+      <div id="score">0</div>
     </div>
-    
+
     <script>
+      var blockType = {
+        empty: 0,
+        coin: 1,
+        brick: 2,
+        cherry: 3,
+      };
+      var world = [
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 0, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+        [2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2],
+        [2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2],
+        [2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 2],
+        [2, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 2],
+        [2, 1, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2],
+        [2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+      ];
+      var pacmanElement = document.getElementById("pacman");
+      var scoreElement = document.getElementById("score");
+      var worldElement = document.getElementById("world");
 
-        var world = [
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-            [2,0,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2],
-            [2,1,2,2,1,1,2,2,1,1,1,2,2,1,1,2,2,1,2],
-            [2,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,2],
-            [2,2,1,1,2,2,2,2,2,1,2,2,2,2,2,1,1,1,2],
-            [2,1,1,1,2,1,1,1,1,3,1,1,1,1,2,1,1,1,2],
-            [2,1,2,1,2,1,2,2,2,2,2,2,2,1,2,1,2,1,2],
-            [2,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,2],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
-            ];
+      var pacman = {
+        x: 1,
+        y: 1,
+      };
+      var score = 0;
 
-            var pacman={
-                x: 1,
-                y: 1
-            };
-            var score = 0;
-            
-        function displayWorld(){
-            var output='';
-            for(var i=0; i<world.length; i++){
-                output += "\n<div class='row'>\n";
-                for(var j=0; j<world[i].length; j++){
-                    if(world[i][j] == 2)
-                        output += "<div class='brick'></div>";
-                    else if(world[i][j] == 1)
-                        output += "<div class='coin'></div>";
-                    else if(world[i][j] == 0)
-                        output += "<div class='empty'></div>";
-                    else if(world[i][j] == 3)
-                        output += "<div class='cherry'></div>";
-                }
-                output += "\n</div>";
-            }
-            console.log(output)
-            document.getElementById('world').innerHTML = output;
+      function displayWorld() {
+        var output = "";
+        for (var i = 0; i < world.length; i++) {
+          output += "\n<div class='row'>\n";
+          for (var j = 0; j < world[i].length; j++) {
+            if (world[i][j] == blockType.brick)
+              output += "<div class='brick'></div>";
+            else if (world[i][j] == blockType.coin)
+              output += "<div class='coin'></div>";
+            else if (world[i][j] == blockType.empty)
+              output += "<div class='empty'></div>";
+            else if (world[i][j] == blockType.cherry)
+              output += "<div class='cherry'></div>";
+          }
+          output += "\n</div>";
         }
-        function displayPacman(){
-            document.getElementById('pacman').style.top = pacman.y*24+"px";
-            document.getElementById('pacman').style.left = pacman.x*20+"px";
+        console.log(output);
+        worldElement.innerHTML = output;
+      }
+      function displayPacman() {
+        pacmanElement.style.top = pacman.y * 24 + "px";
+        pacmanElement.style.left = pacman.x * 20 + "px";
+      }
+      function displayScore() {
+        scoreElement.innerHTML = score;
+      }
+      displayPacman();
+      displayWorld();
+      document.onkeydown = function (e) {
+        if (
+          e.keyCode == 37 &&
+          world[pacman.y][pacman.x - 1] != blockType.brick
+        ) {
+          pacmanElement.style.transform = "rotate(-180deg)";
+          pacman.x--;
+        } else if (
+          e.keyCode == 39 &&
+          world[pacman.y][pacman.x + 1] != blockType.brick
+        ) {
+          pacmanElement.style.transform = "rotate(0deg)";
+          pacman.x++;
+        } else if (
+          e.keyCode == 38 &&
+          world[pacman.y - 1][pacman.x] != blockType.brick
+        ) {
+          pacmanElement.style.transform = "rotate(-90deg)";
+          pacman.y--;
+        } else if (
+          e.keyCode == 40 &&
+          world[pacman.y + 1][pacman.x] != blockType.brick
+        ) {
+          pacmanElement.style.transform = "rotate(90deg)";
+          pacman.y++;
         }
-        function displayScore(){
-            document.getElementById('score').innerHTML = score;
+
+        if (world[pacman.y][pacman.x] == blockType.coin) {
+          world[pacman.y][pacman.x] = blockType.empty;
+          score += 10;
+          displayWorld();
+          displayScore();
         }
+        if (world[pacman.y][pacman.x] == blockType.cherry) {
+          world[pacman.y][pacman.x] = blockType.empty;
+          score += 50;
+          displayWorld();
+          displayScore();
+        }
+        // console.log(e);
         displayPacman();
-        displayWorld();
-        document.onkeydown = function(e){
-            if(e.keyCode == 37 && world[pacman.y][pacman.x-1] != 2){
-                document.getElementById('pacman').style.transform = "rotate(-180deg)";
-                pacman.x--;
-            }
-            else if(e.keyCode == 39 && world[pacman.y][pacman.x+1] != 2){
-                document.getElementById('pacman').style.transform = "rotate(0deg)";
-                pacman.x++;
-            }
-            else if(e.keyCode == 38 && world[pacman.y-1][pacman.x] != 2){
-                document.getElementById('pacman').style.transform = "rotate(-90deg)";
-                pacman.y--;
-            }
-            else if(e.keyCode == 40 && world[pacman.y+1][pacman.x] != 2){
-                document.getElementById('pacman').style.transform = "rotate(90deg)";
-                pacman.y++;   
-            }
-            
-            if (world[pacman.y][pacman.x] == 1){
-                world[pacman.y][pacman.x] = 0;
-                score+=10;
-                displayWorld();
-                displayScore();
-            }
-            if (world[pacman.y][pacman.x] == 3){
-                world[pacman.y][pacman.x] = 0;
-                score+=50;
-                displayWorld();
-                displayScore();
-            }
-            // console.log(e);
-            displayPacman();
-        }
-
-
+      };
     </script>
-</body>
+  </body>
 </html>
